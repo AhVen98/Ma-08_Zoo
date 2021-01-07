@@ -1,9 +1,33 @@
--------------------------------------------------------
+-- ----------------------------------------------------
+-- CreateDatabase ZOO.sql
+-- Date: January 2021
+-- Author: V.Butty & P.Costa
+-- Goal: Creates the Zoo DB
+--       If the DB already exists, it is destroyed and recreated
+--       The data directory C:\DATA\MSSQL is created if it doesn't exist
+-- -----------------------------------------------------
+USE master
+GO
+
+-- ----------------------------------------------------
+-- Drop the database if it exists
+-- ----------------------------------------------------
+IF (EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = 'ZOO'))
+BEGIN
+	USE master
+	ALTER DATABASE ZOO SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+	DROP DATABASE ZOO
+END
+GO
+
+-- ----------------------------------------------------
 -- Create the database and speficy file locations
 -- ----------------------------------------------------
-CREATE DATABASE [ZOO]
-	ON (NAME = 'ZOO_data', FILENAME = 'C:\DATA\MSSQL\ZOO.mdf', SIZE = MB, MAXSIZE = MB, FILEGROWTH = MB)
-LOG ON (NAME = 'ZOO_log', FILENAME = 'C:\DATA\MSSQL\ZOO.ldf', SIZE = MB, MAXSIZE = MB, FILEGROWTH = MB)
+EXEC master.sys.xp_create_subdir 'C:\DATA\MSSQL'
+GO
+CREATE DATABASE ZOO
+	ON (NAME = 'ZOO_data', FILENAME = 'C:\DATA\MSSQL\ZOO.mdf', SIZE = 2048 MB, MAXSIZE = 5120MB, FILEGROWTH = 1024MB)
+	LOG ON (NAME = 'ZOO_log', FILENAME = 'C:\DATA\MSSQL\ZOO.ldf', SIZE = 1024MB, MAXSIZE = 2048MB, FILEGROWTH = 1024MB)
 GO
 
 -- ----------------------------------------------------
@@ -54,12 +78,26 @@ GO
 
 CREATE TABLE sectors (
   id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-  name VARCHAR(45) UNIQUE NOT NULL,
+  name VARCHAR(45) UNIQUE NOT NULL
 );
 GO
 
 
 CREATE TABLE types (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  name VARCHAR(45) UNIQUE NOT NULL
+);
+GO
+
+
+CREATE TABLE states (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  name VARCHAR(45) UNIQUE NOT NULL
+);
+GO
+
+
+CREATE TABLE care (
   id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
   name VARCHAR(45) UNIQUE NOT NULL
 );
@@ -99,7 +137,7 @@ CREATE TABLE animals (
   FOREIGN KEY (species_id) REFERENCES species(id)
     ON DELETE RESTRICT,
   FOREIGN KEY (sex_id) REFERENCES sex(id)
-    ON DELETE RESTRICT
+    ON DELETE RESTRICT,
   FOREIGN KEY (pens_id) REFERENCES sectors(id)
     ON DELETE RESTRICT,
   FOREIGN KEY (mother_id) REFERENCES animals(id)
@@ -141,20 +179,6 @@ CREATE TABLE stocks (
     ON DELETE RESTRICT,
 
   CONSTRAINT product UNIQUE NONCLUSTERED (reference, provider)
-);
-GO
-
-
-CREATE TABLE states (
-  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-  name VARCHAR(45) UNIQUE NOT NULL
-);
-GO
-
-
-CREATE TABLE care (
-  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-  name VARCHAR(45) UNIQUE NOT NULL,
 );
 GO
 
