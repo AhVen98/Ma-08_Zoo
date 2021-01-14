@@ -20,11 +20,13 @@ BEGIN TRANSACTION
   BEGIN TRY
 
     INSERT INTO diets values ('herbivore')
+	INSERT INTO diets values ('folivore')
 	INSERT INTO diets values ('granivore')
 	INSERT INTO diets values ('frugivore')
 	INSERT INTO diets values ('nectarivore')
 	INSERT INTO diets values ('insectivore')
 	INSERT INTO diets values ('piscivore')
+	INSERT INTO diets values ('carnassier')
 	INSERT INTO diets values ('charognard')
 	INSERT INTO diets values ('omnivore')
 
