@@ -60,11 +60,6 @@ CREATE TABLE species (
   name VARCHAR(45) UNIQUE NOT NULL,
   diets_id INT NOT NULL,
   status_id INT NOT NULL,
-
-  FOREIGN KEY (diets_id) REFERENCES diets(id)
-    ON DELETE CASCADE,
-  FOREIGN KEY (status_id) REFERENCES status(id)
-    ON DELETE RESTRICT
 );
 GO
 
@@ -109,15 +104,10 @@ CREATE TABLE pens (
   name VARCHAR(45) UNIQUE NOT NULL,
   constructionDate DATE NOT NULL,
   lastwork DATE NOT NULL,
-  livedIn TINYINT(1) NOT NULL,
-  size DOUBLE NOT NULL,
+  livedIn BIT NOT NULL,
+  size FLOAT NOT NULL,
   sectors_id INT NOT NULL,
   types_id INT NOT NULL,
-  
-  FOREIGN KEY (sectors_id) REFERENCES sectors(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (types_id) REFERENCES types(id)
-    ON DELETE RESTRICT
 );
 GO
 
@@ -133,17 +123,6 @@ CREATE TABLE animals (
   pens_id INT NOT NULL,
   mother_id INT NULL,
   father_id INT NULL,
-
-  FOREIGN KEY (species_id) REFERENCES species(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (sex_id) REFERENCES sex(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (pens_id) REFERENCES sectors(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (mother_id) REFERENCES animals(id)
-    ON DELETE SET NULL,
-  FOREIGN KEY (father_id) REFERENCES animals(id)
-    ON DELETE SET NULL
 );
 GO
 
@@ -156,11 +135,6 @@ CREATE TABLE employees (
   firstname VARCHAR(45) NOT NULL,
   birthdate DATE NOT NULL,
   sex_id INT NOT NULL,
-  
-  FOREIGN KEY (sex_id) REFERENCES sex(id)
-    ON DELETE RESTRICT,
-
-  CONSTRAINT employee UNIQUE NONCLUSTERED (contractnumber, lastname, firstname)
 );
 GO
 
@@ -170,15 +144,10 @@ CREATE TABLE stocks (
   reference VARCHAR(45) UNIQUE NOT NULL,
   name VARCHAR(45) NOT NULL,
   provider VARCHAR(45) NOT NULL,
-  priceperunit DOUBLE NOT NULL,
+  priceperunit FLOAT NOT NULL,
   uses VARCHAR(45) NOT NULL,
-  quantity DOUBLE NOT NULL,
+  quantity FLOAT NOT NULL,
   sectors_id INT NOT NULL,
-  
-  FOREIGN KEY (sectors_id) REFERENCES sectors(id)
-    ON DELETE RESTRICT,
-
-  CONSTRAINT product UNIQUE NONCLUSTERED (reference, provider)
 );
 GO
 
@@ -187,13 +156,6 @@ CREATE TABLE animals_has_states (
   id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
   animals_id INT NOT NULL,
   states_id INT NOT NULL,
-  
-  FOREIGN KEY (animals_id) REFERENCES animals(id)
-    ON DELETE CASCADE,
-  FOREIGN KEY (states_id) REFERENCES states(id)
-    ON DELETE RESTRICT,
-
-  CONSTRAINT state UNIQUE NONCLUSTERED (animals_id, states_id)
 );
 GO
  
@@ -204,19 +166,8 @@ CREATE TABLE animals_follows_care (
   care_id INT NOT NULL,
   employees_id INT NULL,
   stocks_id INT NULL,
-  stockQuantity DOUBLE NULL,
+  stockQuantity FLOAT NULL,
   date DATE NOT NULL,
-  
-  FOREIGN KEY (animals_id) REFERENCES animals(id)
-    ON DELETE CASCADE,
-  FOREIGN KEY (care_id) REFERENCES care(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (stocks_id) REFERENCES stocks(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (employees_id) REFERENCES employees(id)
-    ON DELETE SET NULL,
-
-  CONSTRAINT care UNIQUE NONCLUSTERED (care_id, animals_id)
 );
 GO
 
@@ -226,14 +177,70 @@ CREATE TABLE employees_supplies_pens (
   employees_id INT NULL,
   pens_id INT NOT NULL,
   stocks_id INT NULL,
-  stockQuantity DOUBLE NULL,
+  stockQuantity FLOAT NULL,
   date DATE NOT NULL,
-
-  FOREIGN KEY (employees_id) REFERENCES employees(id)
-    ON DELETE SET NULL,
-  FOREIGN KEY (pens_id) REFERENCES pens(id)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (stocks_id) REFERENCES stocks(id)
-    ON DELETE RESTRICT
 );
+GO
+
+
+-- ----------------------------------------------------
+-- Specify the referential constraint
+-- ----------------------------------------------------
+ALTER TABLE species WITH CHECK ADD CONSTRAINT FK_species_diet FOREIGN KEY (diets_id) REFERENCES diets(id)
+    ON DELETE CASCADE
+
+ALTER TABLE species WITH CHECK ADD CONSTRAINT FK_species_status FOREIGN KEY (status_id) REFERENCES status(id)
+
+ALTER TABLE pens WITH CHECK ADD CONSTRAINT FK_pens_sectors FOREIGN KEY (sectors_id) REFERENCES sectors(id)
+
+ALTER TABLE pens WITH CHECK ADD CONSTRAINT FK_pens_types FOREIGN KEY (types_id) REFERENCES types(id)
+
+ALTER TABLE animals WITH CHECK ADD CONSTRAINT FK_animals_species FOREIGN KEY (species_id) REFERENCES species(id)
+
+ALTER TABLE animals WITH CHECK ADD CONSTRAINT FK_animals_pens FOREIGN KEY (pens_id) REFERENCES pens(id)
+
+ALTER TABLE animals WITH CHECK ADD CONSTRAINT FK_animal_mother FOREIGN KEY (mother_id) REFERENCES animals(id)
+    -- ON DELETE SET NULL =>
+
+ALTER TABLE animals WITH CHECK ADD CONSTRAINT FK_animal_father FOREIGN KEY (father_id) REFERENCES animals(id)
+    -- ON DELETE SET NULL =>
+
+ALTER TABLE employees WITH CHECK ADD CONSTRAINT FK_employees_sex FOREIGN KEY (sex_id) REFERENCES sex(id)
+
+ALTER TABLE stocks WITH CHECK ADD CONSTRAINT FK_stocks_sectors FOREIGN KEY (sectors_id) REFERENCES sectors(id)
+
+ALTER TABLE animals_has_states WITH CHECK ADD CONSTRAINT FK_animals_has_states_animal FOREIGN KEY (animals_id) REFERENCES animals(id)
+    ON DELETE CASCADE
+
+ALTER TABLE animals_has_states WITH CHECK ADD CONSTRAINT FK_animals_has_states_states FOREIGN KEY (states_id) REFERENCES states(id)
+
+ALTER TABLE animals_follows_care WITH CHECK ADD CONSTRAINT FK_animalsFollowsCare_animals FOREIGN KEY (animals_id) REFERENCES animals(id)
+    ON DELETE CASCADE
+
+ALTER TABLE animals_follows_care WITH CHECK ADD CONSTRAINT FK_animals_follows_care_care FOREIGN KEY (care_id) REFERENCES care(id)
+
+ALTER TABLE animals_follows_care WITH CHECK ADD CONSTRAINT FK_animals_follows_care_stocks FOREIGN KEY (stocks_id) REFERENCES stocks(id)
+
+ALTER TABLE animals_follows_care WITH CHECK ADD CONSTRAINT FK_animals_follows_care_employees FOREIGN KEY (employees_id) REFERENCES employees(id)
+    ON DELETE SET NULL
+
+ALTER TABLE employees_supplies_pens WITH CHECK ADD CONSTRAINT FK_employees_supplies_pens_employees FOREIGN KEY (employees_id) REFERENCES employees(id)
+    ON DELETE SET NULL
+
+ALTER TABLE employees_supplies_pens WITH CHECK ADD CONSTRAINT FK_employees_supplies_pens_pens FOREIGN KEY (pens_id) REFERENCES pens(id)
+
+ALTER TABLE employees_supplies_pens WITH CHECK ADD CONSTRAINT FK_employees_supplies_pens_stocks FOREIGN KEY (stocks_id) REFERENCES stocks(id)
+
+GO
+-- ----------------------------------------------------
+-- Specify the natural identifiers
+-- ----------------------------------------------------
+CREATE UNIQUE NONCLUSTERED INDEX UniqueEmployee ON employees (contractnumber, lastname, firstname)
+
+CREATE UNIQUE NONCLUSTERED INDEX UniqueProduct ON stocks (reference, provider)
+
+CREATE UNIQUE NONCLUSTERED INDEX UniqueAnimalState ON animals_has_states (animals_id, states_id)
+
+CREATE UNIQUE NONCLUSTERED INDEX UniqueAnimalCare ON animals_follows_care (care_id, animals_id)
+
 GO
