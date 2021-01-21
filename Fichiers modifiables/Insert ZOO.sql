@@ -40,29 +40,6 @@ BEGIN TRANSACTION
 	INSERT INTO status values ('données insuffisantes', 'DD')
 	INSERT INTO status values ('non évalué', 'NE')
 
-	-- INSERT INTO species values ('','','')
-
-	INSERT INTO sex values ('mâle')
-	INSERT INTO sex values ('femelle')
-	INSERT INTO sex values ('indéterminé')
-
-	-- INSERT INTO sectors values ('')
-
-	-- INSERT INTO types values ('')
-
-	-- INSERT INTO states values ('')
-
-	-- INSERT INTO care values ('')
-
-    COMMIT TRANSACTION
-  END TRY
-  BEGIN CATCH
-      ROLLBACK TRANSACTION
-  END CATCH
-GO
-
-BEGIN TRANSACTION 
-  BEGIN TRY
 
 	SET IDENTITY_INSERT [dbo].[species] ON
 
@@ -105,8 +82,32 @@ BEGIN TRANSACTION
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (37, N'Loutre naine d''Asie', 8, 5)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (38, N'Loup arctique', 8, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (39, N'Pika de pallas', 1, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (40, N'Python royal', 8, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (41, N'Dragon barbu de l''Est', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (42, N'Dragon de Komodo', 8, 5)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (43, N'Caméléon panthère', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (44, N'Tortue léopard', 8, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (45, N'Rainette arboricole', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Sonneur oritental', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (47, N'Tarentule vraie', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (44, N'Scorpion', 8, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Mante religieuse', 6, 7)
+
 
 	SET IDENTITY_INSERT [dbo].[species] OFF
+
+
+	INSERT INTO sex values ('mâle')
+	INSERT INTO sex values ('femelle')
+	INSERT INTO sex values ('indéterminé')
+
+	-- INSERT INTO sectors values ('')
+
+	-- INSERT INTO types values ('')
+
+	-- INSERT INTO states values ('')
+
+	-- INSERT INTO care values ('')
 
     COMMIT TRANSACTION
   END TRY
@@ -114,6 +115,7 @@ BEGIN TRANSACTION
       ROLLBACK TRANSACTION
   END CATCH
 GO
+
 
 BEGIN TRANSACTION 
   BEGIN TRY
