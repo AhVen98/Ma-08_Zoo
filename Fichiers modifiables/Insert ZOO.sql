@@ -90,8 +90,8 @@ BEGIN TRANSACTION
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (45, N'Rainette arboricole', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Sonneur oritental', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (47, N'Tarentule vraie', 6, 7)
-	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (44, N'Scorpion', 8, 7)
-	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Mante religieuse', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (48, N'Scorpion', 8, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (49, N'Mante religieuse', 6, 7)
 
 
 	SET IDENTITY_INSERT [dbo].[species] OFF
@@ -105,9 +105,28 @@ BEGIN TRANSACTION
 
 	-- INSERT INTO types values ('')
 
-	-- INSERT INTO states values ('')
+	INSERT INTO states values ('gravide')
+	INSERT INTO states values ('blessé')
+	INSERT INTO states values ('malade')
+	INSERT INTO states values ('sous surveillance')
+	INSERT INTO states values ('en acclimatation')
+	INSERT INTO states values ('prêté')
+	INSERT INTO states values ('estropié')
 
-	-- INSERT INTO care values ('')
+	INSERT INTO care values ('changement bandages')
+	INSERT INTO care values ('prise antibiotiques')
+	INSERT INTO care values ('prise médicaments')
+	INSERT INTO care values ('prise vitamines')
+	INSERT INTO care values ('prise minéraux')
+	INSERT INTO care values ('prise compléments alimentaires')
+	INSERT INTO care values ('échographie')
+	INSERT INTO care values ('pesée')
+	INSERT INTO care values ('biberonnée')
+	INSERT INTO care values ('régime riche en vitamines')
+	INSERT INTO care values ('régime riche en protéines')
+	INSERT INTO care values ('régime riche en minéraux')
+
+
 
     COMMIT TRANSACTION
   END TRY
