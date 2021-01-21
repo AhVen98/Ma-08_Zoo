@@ -84,14 +84,14 @@ BEGIN TRANSACTION
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (39, N'Pika de pallas', 1, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (40, N'Python royal', 8, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (41, N'Dragon barbu de l''Est', 6, 7)
-	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (42, N'Dragon de Komodo', 8, 5)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (42, N'Gecko léopard', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (43, N'Caméléon panthère', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (44, N'Tortue léopard', 8, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (45, N'Rainette arboricole', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Sonneur oritental', 6, 7)
 	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (47, N'Tarentule vraie', 6, 7)
-	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (44, N'Scorpion', 8, 7)
-	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (46, N'Mante religieuse', 6, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (48, N'Scorpion', 8, 7)
+	INSERT [dbo].[species] ([id], [name], [diets_id], [status_id]) VALUES (49, N'Mante religieuse', 6, 7)
 
 
 	SET IDENTITY_INSERT [dbo].[species] OFF
