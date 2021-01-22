@@ -34,7 +34,7 @@ RIGHT JOIN stocks ON animals_follows_care.stocks_id = stocks.id;
 -- ----------------------------------------------------
 -- Affiche le nom, le secteur et le type d'un enclos
 -- ----------------------------------------------------
-SELECT pens.name as 'nom de l''enclos', sectors.name as secteur, types.name AS type
+SELECT pens.name as 'pens', sectors.name as sector, types.name AS type
 FROM pens
 JOIN sectors ON pens.sectors_id = sectors.id
 JOIN types ON pens.types_id = types.id;
@@ -42,7 +42,7 @@ JOIN types ON pens.types_id = types.id;
 -- ----------------------------------------------------
 -- Affiche le nom, le sexe et l'espèce d'un animal
 -- ----------------------------------------------------
-SELECT a.name, sex.name AS sex, species.name
+SELECT a.name, sex.name AS sex, species.name AS species
 FROM animals a
 JOIN sex ON a.sex_id = sex.id
 JOIN species ON a.species_id = species.id;
@@ -50,14 +50,14 @@ JOIN species ON a.species_id = species.id;
 -- ----------------------------------------------------
 -- Affiche l'état et le nom d'un animal
 -- ----------------------------------------------------
-SELECT states.name, animals.name FROM animals_has_states
+SELECT states.name AS state, animals.name FROM animals_has_states AS name
 JOIN states ON animals_has_states.states_id = states.id
 JOIN animals ON animals_has_states.animals_id = animals.id;
 
 -- ----------------------------------------------------
 -- Affiche le statut de conservation, le régime alimentaire et le nom de l'espèce, trié par statut
 -- ----------------------------------------------------
-SELECT status.name, diets.name, species.name FROM species
+SELECT species.name FROM species AS species, status.name AS status, diets.name AS diet
 JOIN status ON status.id = species.status_id
 JOIN diets ON diets.id = species.diets_id
 ORDER BY status.id;
@@ -65,6 +65,6 @@ ORDER BY status.id;
 -- ----------------------------------------------------
 -- Affiche la référence, le nom, le prix unitaire, le fournisseur et l'utilisation des produits du stocks, le tout affiché par utilisation
 -- ----------------------------------------------------
-SELECT stocks.reference, stocks.name, stocks.priceperunit, stocks.provider, stocks.uses
+SELECT reference, name, priceperunit, provider, uses
 FROM stocks
-ORDER BY stocks.uses;
+ORDER BY uses;
