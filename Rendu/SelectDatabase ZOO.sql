@@ -2,7 +2,7 @@
 -- SelectDatabase ZOO.sql
 -- Date: January 2021
 -- Author: V.Butty & P.Costa
--- Goal: 
+-- Goal: show the good working of the database and the data's pertinence
 -- -----------------------------------------------------
 
 
