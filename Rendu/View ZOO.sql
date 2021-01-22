@@ -29,6 +29,7 @@ Select COUNT(animals.id) AS Animals,
 (Select COUNT(id) FROM sex) AS Sex,
 (Select COUNT(id) FROM states) AS States,
 (Select COUNT(id) FROM status) AS Status,
+(Select COUNT(id) FROM species) AS Species,
 (Select COUNT(id) FROM stocks) AS Stocks,
 (Select COUNT(id) FROM types) AS Types
 FROM animals
