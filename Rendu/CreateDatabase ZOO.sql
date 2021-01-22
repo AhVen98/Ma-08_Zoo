@@ -130,7 +130,7 @@ GO
 CREATE TABLE employees (
   id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
   contractnumber VARCHAR(45) UNIQUE NOT NULL,
-  acronym VARCHAR(4) UNIQUE NOT NULL,
+  acronym VARCHAR(4) UNIQUE NOT NULL CHECK (acronym LIKE '[A-Z][A-Z][A-Z]'),
   lastname VARCHAR(45) NOT NULL,
   firstname VARCHAR(45) NOT NULL,
   birthdate DATE NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE stocks (
   reference VARCHAR(45) UNIQUE NOT NULL,
   name VARCHAR(45) NOT NULL,
   provider VARCHAR(45) NOT NULL,
-  priceperunit FLOAT NOT NULL,
+  priceperunit FLOAT NOT NULL CHECK(priceperunit > 0),
   uses VARCHAR(45) NOT NULL,
   quantity FLOAT NOT NULL,
   sectors_id INT NOT NULL,
@@ -244,3 +244,46 @@ CREATE UNIQUE NONCLUSTERED INDEX UniqueAnimalState ON animals_has_states (animal
 CREATE UNIQUE NONCLUSTERED INDEX UniqueAnimalCare ON animals_follows_care (care_id, animals_id)
 
 GO
+
+-- ----------------------------------------------------
+-- Information for dataedo
+-- ----------------------------------------------------
+
+-- Sur les tables
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'employees_supplies_pens',   
+	        @name = 'MS_Description', @value='Cette table relie entre elles 3 tables, la table employés ("employees"), la table animaux ("animals") et la table stock ("stocks"). Elle permet de montrer les éléments suivants : un ou plusieurs employés ravitaille un ou plusieurs enclos. Pour ce faire, il(s) utilise(nt) aucun ou plusieurs éléments présents dans les stocks.';
+	
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'animals_follows_care',   
+	        @name = 'MS_Description', @value='Cette table permet de regrouper une action regroupant au maximum quatre éléments : un animal, un soigneur, un soin particulier et du stock.  Un animal peut suivre aucun ou plusieurs soins et un soin peut être suivi par aucun ou plusieurs animaux. Ce soin sera effectué par un ou plusieurs employé(s). Pour cela, ils vont utiliser aucun ou plusieurs éléments des stocks.';
+	
+-- Sur les colonnes	
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'animals',   
+	        @level2type = N'Column',@level2name = 'mother_id',
+	        @name = 'MS_Description', @value='il s''agit de référencer un autre animal présent dans le zoo, qui est la mère de la bête dont nous consultons les informations. Une absence de données ne signifie pas son inexistance, simplement que cet individu ne fait pas parti du zoo.';
+		EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'animals',   
+	        @level2type = N'Column',@level2name = 'father_id',
+	        @name = 'MS_Description', @value='il s''agit de référencer un autre animal présent dans le zoo, qui est le père de la bête dont nous consultons les informations. Une absence de données ne signifie pas son inexistance, simplement que cet individu ne fait pas parti du zoo.';	
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'employees',   
+	        @level2type = N'Column',@level2name = 'contractnumber',
+	        @name = 'MS_Description', @value='on parle ici du numéro de contrat de l''employé. Celui-ci est unique et permet de retrouver la personne facilement lors de recherches spécifiques sur les employés.';
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'employees',   
+	        @level2type = N'Column',@level2name = 'acronym',
+	        @name = 'MS_Description', @value='Un acronyme sert aux employés pour signifier aux autres qui a accompli quoi. Il remplit globalement la même fonctionnalité que le numéro de contrat, mais est beaucoup plus compréhensible pour un être humain. Il est créé grâce à la première lettre du prénom, la première lettre du nom et la dernière lettre du nom.';
+	EXECUTE sp_addextendedproperty 
+	        @level0type = N'Schema', @level0name = 'dbo',  
+	        @level1type = N'Table', @level1name = 'animals_follows_care',   
+	        @level2type = N'Column',@level2name = 'stockQuantity',
+	        @name = 'MS_Description', @value='La quantité de stock représente la quantité de stock qui est extraite de la base de données lors de manipulations avec un animal.';
+
